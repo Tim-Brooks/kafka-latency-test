@@ -4,6 +4,8 @@ import org.HdrHistogram.Histogram;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
@@ -20,6 +22,8 @@ public class ProducerRunnable implements Runnable {
     private final KafkaProducer<byte[], byte[]> producer;
     private final CountDownLatch latch;
     private final String keyPrefix;
+    private final List<String> topics = Arrays.asList("test1", "test2", "test3", "test4", "test5");
+
     public ProducerRunnable(KafkaProducer<byte[], byte[]> producer, CountDownLatch latch, int number) {
         this.producer = producer;
         this.latch = latch;
@@ -46,8 +50,9 @@ public class ProducerRunnable implements Runnable {
     }
 
     private ProducerRecord<byte[], byte[]> generateMessage(int messageNumber) {
+        String topic = topics.get(random.nextInt(5));
         byte[] bytes = new byte[100];
         random.nextBytes(bytes);
-        return new ProducerRecord<>("test", (keyPrefix + messageNumber).getBytes(), bytes);
+        return new ProducerRecord<>(topic, (keyPrefix + messageNumber).getBytes(), bytes);
     }
 }
