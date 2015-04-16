@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.LockSupport;
 
 /**
  * Created by timbrooks on 4/2/15.
@@ -29,7 +30,7 @@ public class App {
         configs.put("key.serializer", ByteArraySerializer.class);
         configs.put("value.serializer", ByteArraySerializer.class);
         KafkaProducer<byte[], byte[]> producer = new KafkaProducer<>(configs);
-        int threadCount = 5;
+        int threadCount = 8;
 
         for (int j = 0; j < 10; ++j) {
 
